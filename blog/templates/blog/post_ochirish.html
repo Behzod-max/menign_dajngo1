@@ -1,0 +1,17 @@
+{% extends 'blog/asosiy.html' %}
+
+{% block sarlavha %}Postni O'chirish{% endblock %}
+
+{% block kontent %}
+    <div class="danger-box">
+        <h2>🗑️ Postni o'chirish</h2>
+        <p><strong>{{ post.sarlavha }}</strong> postini o'chirishni xohlaysizmi?</p>
+        <p>Bu amalni bekor qilib bo'lmaydi.</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">🗑️ Ha, o'chirish</button>
+            <a href="{% url 'post_batafsil' post.id %}" class="btn btn-secondary">❌ Bekor Qilish</a>
+        </form>
+    </div>
+{% endblock %}

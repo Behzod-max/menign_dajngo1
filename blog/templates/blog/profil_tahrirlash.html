@@ -1,0 +1,33 @@
+{% extends 'blog/asosiy.html' %}
+
+{% block sarlavha %}Profilni Tahrirlash{% endblock %}
+
+{% block kontent %}
+    <div class="profil-edit-container">
+        <h2>✏️ Profilni Tahrirlash</h2>
+
+        <div class="current-profile-pic">
+            <img src="{{ user.profil.rasm.url }}" alt="Hozirgi rasm">
+            <p>Hozirgi profil rasmi</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="post-form">
+            {% csrf_token %}
+
+            <fieldset>
+                <legend>Foydalanuvchi Ma'lumotlari</legend>
+                {{ f_forma.as_p }}
+            </fieldset>
+
+            <fieldset>
+                <legend>Profil Ma'lumotlari</legend>
+                {{ p_forma.as_p }}
+            </fieldset>
+
+            <button type="submit" class="btn">💾 Saqlash</button>
+            <a href="{% url 'profil' user.username %}" class="btn btn-secondary">
+                ❌ Bekor Qilish
+            </a>
+        </form>
+    </div>
+{% endblock %}

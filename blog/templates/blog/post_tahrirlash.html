@@ -1,0 +1,15 @@
+{% extends 'blog/asosiy.html' %}
+
+{% block sarlavha %}Postni Tahrirlash{% endblock %}
+
+{% block kontent %}
+    <h2>✏️ Postni Tahrirlash</h2>
+    <p><strong>Tahrirlayotgan post:</strong> {{ post.sarlavha }}</p>
+
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        {{ forma.as_p }}
+        <button type="submit" class="btn">💾 Saqlash</button>
+        <a href="{% url 'post_batafsil' post.id %}" class="btn btn-secondary">❌ Bekor Qilish</a>
+    </form>
+{% endblock %}

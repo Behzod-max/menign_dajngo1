@@ -1,0 +1,26 @@
+{% extends 'blog/asosiy.html' %}
+
+{% block sarlavha %}Kirish{% endblock %}
+
+{% block kontent %}
+    <div class="auth-form">
+        <h2>🔐 Tizimga Kirish</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label>Foydalanuvchi nomi:</label>
+            <input type="text" name="username" required>
+
+            <label>Parol:</label>
+            <input type="password" name="password" required>
+
+            <button type="submit" class="btn">🚀 Kirish</button>
+        </form>
+
+        <p class="auth-link">
+            Hisobingiz yo'qmi?
+            <a href="{% url 'royxatdan_otish' %}">Ro'yxatdan o'ting</a>
+        </p>
+    </div>
+{% endblock %}

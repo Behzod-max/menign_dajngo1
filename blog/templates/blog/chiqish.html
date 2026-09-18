@@ -1,0 +1,4 @@
+def chiqish(request):
+    logout(request)
+    messages.info(request, '👋 Xayr! Tez orada qaytib kelasiz!')
+    return redirect('bosh_sahifa')

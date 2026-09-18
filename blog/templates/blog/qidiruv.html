@@ -1,0 +1,27 @@
+{% extends 'blog/asosiy.html' %}
+
+{% block sarlavha %}Qidiruv{% endblock %}
+
+{% block kontent %}
+    <h2>🔎 Postlarni qidirish</h2>
+
+    <form method="GET" action="{% url 'qidiruv' %}" class="search-form">
+        <input type="search" name="q" value="{{ soz }}" placeholder="Post nomini yozing..." aria-label="Qidiruv so'zi">
+        <button type="submit" class="btn">Qidirish</button>
+    </form>
+
+    {% if soz %}
+        <p><strong>{{ soz }}</strong> bo'yicha natijalar:</p>
+    {% endif %}
+
+    {% for post in postlar %}
+        <div class="post-card">
+            <h3>{{ post.sarlavha }}</h3>
+            <p class="post-meta">👤 {{ post.muallif }} | 📅 {{ post.yaratilgan_sana|date:"d-M-Y, H:i" }}</p>
+            <p>{{ post.matn|truncatewords:30 }}</p>
+            <a href="{% url 'post_batafsil' post.id %}" class="btn">Batafsil o'qish →</a>
+        </div>
+    {% empty %}
+        {% if soz %}<p>Bu so'rov bo'yicha post topilmadi.</p>{% endif %}
+    {% endfor %}
+{% endblock %}

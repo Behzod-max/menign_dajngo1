@@ -1,0 +1,44 @@
+{% extends 'blog/asosiy.html' %}
+
+{% block kontent %}
+    <h2>📝 So'nggi Postlar</h2>
+
+    {% for post in postlar %}
+        <div class="post-card">
+            {% if post.rasm %}
+                <img src="{{ post.rasm.url }}" alt="{{ post.sarlavha }}" class="post-image">
+            {% endif %}
+
+            <div class="post-card-content">
+                <h3>{{ post.sarlavha }}</h3>
+                <p class="post-meta">
+                    👤 {{ post.muallif.username }} |
+                    📅 {{ post.yaratilgan_sana|date:"d-M-Y" }}
+                </p>
+                <p>{{ post.matn|truncatewords:30 }}</p>
+                <a href="{% url 'post_batafsil' post.id %}" class="btn">
+                    Batafsil o'qish →
+                </a>
+            </div>
+        </div>
+    {% empty %}
+        <p>Hozircha postlar mavjud emas.</p>
+    {% endfor %}
+
+    <!-- Sahifalash -->
+    <div class="pagination">
+        {% if postlar.has_previous %}
+            <a href="?sahifa=1" class="btn btn-secondary">⏮ Birinchi</a>
+            <a href="?sahifa={{ postlar.previous_page_number }}" class="btn btn-secondary">⬅ Oldingi</a>
+        {% endif %}
+
+        <span class="current-page">
+            Sahifa {{ postlar.number }} / {{ postlar.paginator.num_pages }}
+        </span>
+
+        {% if postlar.has_next %}
+            <a href="?sahifa={{ postlar.next_page_number }}" class="btn btn-secondary">Keyingi ➡</a>
+            <a href="?sahifa={{ postlar.paginator.num_pages }}" class="btn btn-secondary">Oxirgi ⏭</a>
+        {% endif %}
+    </div>
+{% endblock %}

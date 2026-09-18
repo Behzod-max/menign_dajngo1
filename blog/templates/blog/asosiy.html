@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block sarlavha %}Mening Blogim{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'blog/css/uslub.css' %}">
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 Mening Ajoyib Blogim</h1>
+        <p>Texnologiya va kundalik hayot haqida fikrlar</p>
+    </div>
+
+    <div class="menu">
+    <!-- Always visible -->
+    <a href="{% url 'bosh_sahifa' %}">🏠 Bosh Sahifa</a>
+    <a href="{% url 'ommabop' %}">🔥 Ommabop</a>
+    <a href="{% url 'biz_haqimizda' %}">👥 Biz Haqimizda</a>
+    {% if user.is_authenticated %}
+        <!-- Only if logged in -->
+        <a href="{% url 'post_yaratish' %}">✍️ Yangi Post</a>
+        <a href="{% url 'profil' user.username %}">👤 {{ user.username }}</a>
+        <a href="{% url 'chiqish' %}">🚪 Chiqish</a>
+    {% else %}
+        <!-- Only if NOT logged in -->
+        <a href="{% url 'kirish' %}">🔐 Kirish</a>
+        <a href="{% url 'royxatdan_otish' %}">📝 Ro'yxatdan O'tish</a>
+    {% endif %}
+
+    <!-- Always visible -->
+    <a href="{% url 'aloqa' %}">📧 Aloqa</a>
+</div>
+
+    <div class="content">
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block kontent %}
+    {% endblock %}
+    </div>
+
+</body>
+</html>

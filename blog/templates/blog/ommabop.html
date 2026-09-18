@@ -1,0 +1,18 @@
+{% extends 'blog/asosiy.html' %}
+
+{% block sarlavha %}Ommabop Postlar{% endblock %}
+
+{% block kontent %}
+    <h2>🔥 Ommabop Postlar</h2>
+
+    {% for post in postlar %}
+        <div class="post-card">
+            <h3>{{ post.sarlavha }}</h3>
+            <p class="post-meta">👤 {{ post.muallif }} | 👁 {{ post.korildi }} marta ko'rilgan</p>
+            <p>{{ post.matn|truncatewords:30 }}</p>
+            <a href="{% url 'post_batafsil' post.id %}" class="btn">Batafsil o'qish →</a>
+        </div>
+    {% empty %}
+        <p>Hozircha ommabop postlar yo'q.</p>
+    {% endfor %}
+{% endblock %}

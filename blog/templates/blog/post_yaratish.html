@@ -1,0 +1,16 @@
+{% extends 'blog/asosiy.html' %}
+
+{% block sarlavha %}Yangi Post Yaratish{% endblock %}
+
+{% block kontent %}
+    <h2>✍️ Yangi Post Yozing</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="post-form">
+        {% csrf_token %}
+
+        {{ forma.as_p }}
+
+        <button type="submit" class="btn">📤 Nashr Etish</button>
+        <a href="{% url 'bosh_sahifa' %}" class="btn btn-secondary">❌ Bekor Qilish</a>
+    </form>
+{% endblock %}

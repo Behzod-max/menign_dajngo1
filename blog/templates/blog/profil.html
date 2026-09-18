@@ -1,0 +1,73 @@
+{% extends 'blog/asosiy.html' %}
+{% load static %}
+
+{% block sarlavha %}{{ profil_egasi.username }} - Profil{% endblock %}
+
+{% block kontent %}
+    <div class="profil-container">
+        <div class="profil-header">
+            <img src="{{ profil_egasi.profil.rasm.url }}"
+                 alt="{{ profil_egasi.username }}"
+                 class="profil-rasm">
+
+            <div class="profil-info">
+                <h1>{{ profil_egasi.username }}</h1>
+
+                {% if profil_egasi.first_name or profil_egasi.last_name %}
+                    <p class="profil-ism">
+                        {{ profil_egasi.first_name }} {{ profil_egasi.last_name }}
+                    </p>
+                {% endif %}
+
+                {% if profil_egasi.profil.bio %}
+                    <p class="profil-bio">{{ profil_egasi.profil.bio }}</p>
+                {% endif %}
+
+                <div class="profil-stats">
+                    <div class="stat">
+                        <strong>{{ postlar_soni }}</strong>
+                        <span>Postlar</span>
+                    </div>
+                    <div class="stat">
+                        <strong>{{ profil_egasi.date_joined|date:"M Y" }}</strong>
+                        <span>Qo'shilgan</span>
+                    </div>
+                </div>
+
+                {% if user == profil_egasi %}
+                    <a href="{% url 'profil_tahrirlash' user.username %}" class="btn">
+                        ✏️ Profilni Tahrirlash
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr>
+
+        <h2>📝 Postlari</h2>
+
+        {% if postlar %}
+            {% for post in postlar %}
+                <div class="post-card">
+                    {% if post.rasm %}
+                        <img src="{{ post.rasm.url }}" alt="{{ post.sarlavha }}" class="post-image">
+                    {% endif %}
+
+                    <div class="post-card-content">
+                        <h3>{{ post.sarlavha }}</h3>
+                        <p class="post-meta">
+                            📅 {{ post.yaratilgan_sana|date:"d-M-Y" }} |
+                            👁 {{ post.korildi }} ko'rilgan
+                        </p>
+                        <p>{{ post.matn|truncatewords:20 }}</p>
+                        <a href="{% url 'post_batafsil' post.id %}" class="btn">
+                            O'qish →
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-posts">Hali postlar yo'q.</p>
+        {% endif %}
+    </div>
+{% endblock %}

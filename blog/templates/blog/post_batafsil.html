@@ -1,0 +1,149 @@
+{% extends 'blog/asosiy.html' %}
+
+{% block sarlavha %}
+    {{ post.sarlavha }}
+{% endblock %}
+
+{% block kontent %}
+
+<article class="post-detail">
+
+    <h1>{{ post.sarlavha }}</h1>
+
+    {% if post.rasm %}
+        <img
+            src="{{ post.rasm.url }}"
+            alt="{{ post.sarlavha }}"
+            class="post-detail-image"
+        >
+    {% endif %}
+
+    <div class="post-meta">
+        👤 <strong>Muallif:</strong>
+        {{ post.muallif }}
+
+        <br>
+
+        📅 <strong>Sana:</strong>
+        {{ post.yaratilgan_sana|date:"d-M-Y, H:i" }}
+
+        <br>
+
+        🏷️ <strong>Kategoriya:</strong>
+        {{ post.get_kategoriya_display }}
+
+        <br>
+
+        👁 <strong>Ko‘rildi:</strong>
+        {{ post.korildi }}
+    </div>
+
+    <div class="post-content">
+        {{ post.matn|linebreaks }}
+    </div>
+
+    <div class="post-actions">
+
+        <a
+            href="{% url 'bosh_sahifa' %}"
+            class="btn"
+        >
+            ⬅ Bosh sahifa
+        </a>
+
+        <a
+            href="{% url 'post_tahrirlash' post.id %}"
+            class="btn"
+        >
+            ✏️ Tahrirlash
+        </a>
+
+        <a
+            href="{% url 'post_ochirish' post.id %}"
+            class="btn btn-danger"
+        >
+            🗑️ O‘chirish
+        </a>
+
+    </div>
+
+</article>
+
+
+<div class="comments">
+
+    <h2>
+        💬 Izohlar ({{ izohlar.count }})
+    </h2>
+
+    {% for izoh in izohlar %}
+
+        <div class="comment">
+
+            <div class="comment-header">
+
+                <strong>
+                    👤 {{ izoh.ism }}
+                </strong>
+
+                <small>
+                    📅
+                    {{ izoh.yaratilgan_sana|date:"d-M-Y H:i" }}
+                </small>
+
+            </div>
+
+            <p>
+                {{ izoh.matn }}
+            </p>
+
+        </div>
+
+    {% empty %}
+
+        <div class="comment">
+            <p>
+                💭 Hozircha izohlar yo‘q.
+                Birinchi bo‘lib izoh qoldiring!
+            </p>
+        </div>
+
+    {% endfor %}
+
+
+    <div class="comment-form">
+
+        <h2>✍️ Izoh qoldirish</h2>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <input
+                type="text"
+                name="ism"
+                placeholder="Ismingiz"
+                required
+            >
+
+            <textarea
+                name="matn"
+                placeholder="Izohingizni yozing..."
+                rows="5"
+                required
+            ></textarea>
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                💬 Izoh yuborish
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

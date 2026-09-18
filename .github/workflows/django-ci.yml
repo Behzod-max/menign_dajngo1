@@ -1,0 +1,106 @@
+name: Django CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test Django Loyihasi
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_parol
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Kodni Yuklab Olish
+        uses: actions/checkout@v4
+
+      - name: Python O'rnatish
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Kutubxonalarni O'rnatish
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt flake8 coverage
+
+      - name: Lint
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Django Tekshiruvlari
+        env:
+          SECRET_KEY: ci-test-secret-key
+          DEBUG: 'True'
+          DB_NAME: test_db
+          DB_USER: test_user
+          DB_PASSWORD: test_parol
+          DB_HOST: localhost
+          DB_PORT: 5432
+        run: |
+          python manage.py check
+          python manage.py makemigrations --check --dry-run
+
+      - name: Testlarni Ishga Tushirish
+        env:
+          SECRET_KEY: ci-test-secret-key
+          DEBUG: 'True'
+          DB_NAME: test_db
+          DB_USER: test_user
+          DB_PASSWORD: test_parol
+          DB_HOST: localhost
+          DB_PORT: 5432
+        run: python manage.py test
+
+      - name: Coverage Hisobot
+        env:
+          SECRET_KEY: ci-test-secret-key
+          DEBUG: 'True'
+          DB_NAME: test_db
+          DB_USER: test_user
+          DB_PASSWORD: test_parol
+          DB_HOST: localhost
+          DB_PORT: 5432
+        run: |
+          coverage run --source=. manage.py test
+          coverage report
+          coverage xml
+
+      - name: Coverage Badge Yangilash
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false
+
+  security:
+    name: Xavfsizlik Tekshiruvi
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python O'rnatish
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Kutubxonalarni O'rnatish
+        run: pip install -r requirements.txt bandit
+      - name: Bandit Security Lint
+        run: bandit -r blog/ saytim/ -f json

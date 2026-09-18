@@ -1,0 +1,22 @@
+{% extends 'blog/asosiy.html' %}
+
+{% block sarlavha %}Ro'yxatdan O'tish{% endblock %}
+
+{% block kontent %}
+    <div class="auth-form">
+        <h2>👤 Ro'yxatdan O'ting</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ forma.as_p }}
+
+            <button type="submit" class="btn">📝 Ro'yxatdan O'tish</button>
+        </form>
+
+        <p class="auth-link">
+            Hisobingiz bormi?
+            <a href="#">Kirish</a>
+        </p>
+    </div>
+{% endblock %}
